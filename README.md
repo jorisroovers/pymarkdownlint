@@ -26,3 +26,6 @@ There is a Vagrantfile in this repository that can be used for development.
 vagrant up
 vagrant ssh
 ```
+
+## Wishlist ##
+- Better output handling

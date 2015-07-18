@@ -1,4 +1,5 @@
 from pymarkdownlint.filefinder import MarkdownFileFinder
+from pymarkdownlint.lint import MarkdownLinter
 import click
 
 
@@ -16,7 +17,9 @@ def cli(list_files, path):
     files = MarkdownFileFinder.find_files(path)
     if list_files:
         echo_files(files)
-    click.echo("foo")
+
+    linter = MarkdownLinter()
+    linter.lint_files(files)
 
 
 if __name__ == "__main__":
