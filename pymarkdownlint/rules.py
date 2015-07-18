@@ -4,7 +4,7 @@ from pymarkdownlint.options import IntOption
 class Rule(object):
     options_spec = []
     id = []
-    name = []
+    name = ""
 
     def __init__(self, opts={}):
         self.options = {}
@@ -25,8 +25,16 @@ class Rule(object):
         pass
 
 
-class RuleError(BaseException):
-    pass
+class RuleError(Exception):
+    def __init__(self, line_nr, message):
+        self.line_nr = line_nr
+        self.message = message
+
+    def __eq__(self, other):
+        return self.message == other.message and self.line_nr == other.line_nr
+
+    def __str__(self):
+        return self.message
 
 
 class MaxLineLengthRule(Rule):
@@ -34,7 +42,7 @@ class MaxLineLengthRule(Rule):
     id = "R1"
     options_spec = [IntOption('line-length', 80, "Max line length")]
 
-    def validate_line(self, line, index):
+    def validate_line(self, line, line_nr):
         max_length = self.options['line-length'].value
         if len(line) > max_length:
-            raise RuleError("Line {0} exceeds max length ({1}>{2})".format(index, len(line), max_length))
+            raise RuleError(line_nr, "Line exceeds max length ({0}>{1})".format(len(line), max_length))

@@ -1,7 +1,7 @@
 from abc import abstractmethod
 
 
-class RuleOptionError(BaseException):
+class RuleOptionError(Exception):
     pass
 
 
