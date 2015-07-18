@@ -15,10 +15,12 @@ class CLITests(BaseTestCase):
     def test_no_errors(self):
         result = self.cli.invoke(cli.cli, [self.get_sample_path("good.md")])
         self.assertEqual(result.output, "")
+        self.assertEqual(result.exit_code, 0)
 
     def test_errors(self):
         result = self.cli.invoke(cli.cli, [self.get_sample_path("sample1.md")])
         self.assert_output_line(result.output, 0, "sample1.md", 3, "Line exceeds max length (119>80)")
+        self.assertEqual(result.exit_code, 1)
 
     def test_cli_list_files(self):
         result = self.cli.invoke(cli.cli, ["--list-files", self.get_sample_path()])
@@ -27,3 +29,4 @@ class CLITests(BaseTestCase):
         for f in expected_files:
             expected_string += self.get_sample_path(f) + "\n"
         self.assertEqual(result.output, expected_string)
+        self.assertEqual(result.exit_code, 0)

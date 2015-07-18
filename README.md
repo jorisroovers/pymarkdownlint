@@ -5,6 +5,7 @@ Get started by running:
 ```bash
 markdownlint examples/
 ```
+NOTE: The returned exit code equals the number of errors found.
 
 If you only want to list the files that will be checked: 
 ```bash
@@ -28,4 +29,8 @@ vagrant ssh
 ```
 
 ## Wishlist ##
-- Better output handling
+- More rules!
+- Better output handling with verbosity levels
+- Ignore files CLI options
+- Disable rules CLI options
+- .markdownlint config support
