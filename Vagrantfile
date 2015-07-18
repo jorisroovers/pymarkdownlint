@@ -5,7 +5,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 INSTALL_DEPS=<<EOF
 sudo apt-get update
-sudo apt-get install -y python-pip python-virtualenv git
+sudo apt-get install -y python-pip python-virtualenv git ipython
 cd /vagrant
 virtualenv .venv
 source .venv/bin/active
