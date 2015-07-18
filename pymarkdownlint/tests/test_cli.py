@@ -6,7 +6,9 @@ from click.testing import CliRunner
 
 
 class CLITests(BaseTestCase):
+    def setUp(self):
+        self.cli = CliRunner()
+
     def test_cli(self):
-        runner = CliRunner()
-        result = runner.invoke(cli.cli)
+        result = self.cli.invoke(cli.cli)
         self.assertEqual(result.output, "foo\n")
