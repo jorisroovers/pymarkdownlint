@@ -29,7 +29,8 @@ run_pep8_check(){
 }
 
 run_unit_tests(){
-    coverage run -m unittest discover -v
+    OMIT=".venv/*"
+    coverage run --omit=$OMIT -m unittest discover -v
     if [ $include_coverage -eq 1 ]; then
         COVERAGE_REPORT=$(coverage report -m)
         echo "$COVERAGE_REPORT"
