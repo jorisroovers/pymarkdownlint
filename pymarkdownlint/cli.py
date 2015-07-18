@@ -19,7 +19,8 @@ def cli(list_files, path):
         echo_files(files)
 
     linter = MarkdownLinter()
-    linter.lint_files(files)
+    error_count = linter.lint_files(files)
+    exit(error_count)
 
 
 if __name__ == "__main__":
