@@ -19,8 +19,10 @@ class CLITests(BaseTestCase):
 
     def test_errors(self):
         result = self.cli.invoke(cli.cli, [self.get_sample_path("sample1.md")])
-        self.assert_output_line(result.output, 0, "sample1.md", 3, "Line exceeds max length (119>80)")
-        self.assertEqual(result.exit_code, 1)
+        self.assert_output_line(result.output, 0, "sample1.md", 3, "R1 Line exceeds max length (119>80)")
+        self.assert_output_line(result.output, 1, "sample1.md", 4, "R2 Line has trailing whitespace")
+        self.assert_output_line(result.output, 2, "sample1.md", 5, "R2 Line has trailing whitespace")
+        self.assertEqual(result.exit_code, 3)
 
     def test_cli_list_files(self):
         result = self.cli.invoke(cli.cli, ["--list-files", self.get_sample_path()])
