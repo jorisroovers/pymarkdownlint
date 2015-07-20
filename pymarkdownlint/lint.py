@@ -1,5 +1,5 @@
 from __future__ import print_function
-from pymarkdownlint.rules import MaxLineLengthRule, TrailingWhiteSpace, RuleError
+from pymarkdownlint.rules import MaxLineLengthRule, TrailingWhiteSpace
 
 
 class MarkdownLinter(object):
