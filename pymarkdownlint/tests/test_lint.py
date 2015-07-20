@@ -10,4 +10,7 @@ class RuleOptionTests(BaseTestCase):
         sample = self.get_sample_path("sample1.md")
         with open(sample) as f:
             errors = linter.lint(f.read())
-            self.assertListEqual(errors, [RuleError(3, 'Line exceeds max length (119>80)')])
+            expected_errors = [RuleError("R1", 3, 'Line exceeds max length (119>80)'),
+                               RuleError("R2", 4, 'Line has trailing whitespace'),
+                               RuleError("R2", 5, 'Line has trailing whitespace')]
+            self.assertListEqual(errors, expected_errors)

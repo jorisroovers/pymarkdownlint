@@ -1,6 +1,8 @@
 # pymarkdownlint
+
 [![Build Status](https://travis-ci.org/jorisroovers/pymarkdownlint.svg?branch=master)]
 (https://travis-ci.org/jorisroovers/pymarkdownlint)
+
 Markdown linter written in python. Inspired by [mivok/markdownlint](https://github.com/mivok/markdownlint).
 
 **NOTE: pymarkdownlint is still under active development and missing many core features** 
@@ -18,9 +20,10 @@ markdownlint --list-files examples/
 
 ## Supported Rules ##
 
-ID    | Name            | Description
-------|-----------------|--------------------------------
-R1    | Max line length | Line length must be &lt; 80 chars.
+ID    | Name                | Description
+------|---------------------|----------------------------------------------------
+R1    | Max line length     | Line length must be &lt; 80 chars.
+R2    | Trailing whitespace | Line cannot have trailing whitespace (space or tab)
 
 
 ## Development ##
@@ -40,6 +43,7 @@ vagrant ssh
 ```
 
 ## Wishlist ##
+- Refactor rule engine, line rules vs. file rules
 - More rules!
 - Better output handling with verbosity levels
 - Ignore files CLI options
