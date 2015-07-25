@@ -1,7 +1,7 @@
 from pymarkdownlint.tests.base import BaseTestCase
 
 from pymarkdownlint.lint import MarkdownLinter
-from pymarkdownlint.rules import RuleError
+from pymarkdownlint.rules import RuleViolation
 
 
 class RuleOptionTests(BaseTestCase):
@@ -10,7 +10,7 @@ class RuleOptionTests(BaseTestCase):
         sample = self.get_sample_path("sample1.md")
         with open(sample) as f:
             errors = linter.lint(f.read())
-            expected_errors = [RuleError("R1", 3, 'Line exceeds max length (119>80)'),
-                               RuleError("R2", 4, 'Line has trailing whitespace'),
-                               RuleError("R2", 5, 'Line has trailing whitespace')]
+            expected_errors = [RuleViolation("R1", 'Line exceeds max length (119>80)', 3),
+                               RuleViolation("R2", 'Line has trailing whitespace', 4),
+                               RuleViolation("R2", 'Line has trailing whitespace', 5)]
             self.assertListEqual(errors, expected_errors)

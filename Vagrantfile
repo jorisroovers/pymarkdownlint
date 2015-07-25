@@ -11,7 +11,6 @@ virtualenv .venv
 source .venv/bin/active
 pip install -r requirements.txt
 pip install -r test-requirements.txt
-deactivate
 EOF
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|

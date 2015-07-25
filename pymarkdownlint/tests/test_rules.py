@@ -1,39 +1,42 @@
 from pymarkdownlint.tests.base import BaseTestCase
-from pymarkdownlint.rules import MaxLineLengthRule, TrailingWhiteSpace, RuleError
+from pymarkdownlint.rules import MaxLineLengthRule, TrailingWhiteSpace, RuleViolation
 
 
 class RuleTests(BaseTestCase):
     def test_max_line_length(self):
         rule = MaxLineLengthRule()
-        line_nr = 1
 
         # assert no error
-        rule.validate_line("a" * 80, line_nr)
+        violation = rule.validate("a" * 80)
+        self.assertIsNone(violation)
 
         # assert error on line length > 81
-        with self.assertRaises(RuleError):
-            rule.validate_line("a" * 81, line_nr)
+        expected_violation = RuleViolation("R1", "Line exceeds max length (81>80)")
+        violation = rule.validate("a" * 81)
+        self.assertEqual(violation, expected_violation)
 
-        # set line length to 120, and assert no raise on length 81
+        # set line length to 120, and check no violation on length 81
         rule = MaxLineLengthRule({'line-length': 120})
-        rule.validate_line("a" * 81, line_nr)
+        violation = rule.validate("a" * 81)
+        self.assertIsNone(violation)
 
         # assert raise on 121
-        with self.assertRaises(RuleError):
-            rule.validate_line("a" * 121, line_nr)
+        expected_violation = RuleViolation("R1", "Line exceeds max length (121>120)")
+        violation = rule.validate("a" * 121)
+        self.assertEqual(violation, expected_violation)
 
     def test_trailing_whitespace(self):
         rule = TrailingWhiteSpace()
-        line_nr = 1
 
         # assert no error
-        rule.validate_line("a", line_nr)
+        violation = rule.validate("a")
+        self.assertIsNone(violation)
 
         # trailing space
-        expected_error = "Line has trailing whitespace"
-        with self.assertRaisesRegexp(RuleError, expected_error):
-            rule.validate_line("a ", line_nr)
+        expected_violation = RuleViolation("R2", "Line has trailing whitespace")
+        violation = rule.validate("a ")
+        self.assertEqual(violation, expected_violation)
 
         # trailing tab
-        with self.assertRaisesRegexp(RuleError, expected_error):
-            rule.validate_line("a\t", line_nr)
+        violation = rule.validate("a\t")
+        self.assertEqual(violation, expected_violation)

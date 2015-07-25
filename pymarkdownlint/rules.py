@@ -1,12 +1,15 @@
+from abc import abstractmethod, ABCMeta
 from pymarkdownlint.options import IntOption
 
 import re
 
 
 class Rule(object):
+    """ Class representing markdown rules. """
     options_spec = []
     id = []
     name = ""
+    __metaclass__ = ABCMeta
 
     def __init__(self, opts={}):
         self.options = {}
@@ -16,24 +19,23 @@ class Rule(object):
             if actual_option:
                 self.options[op_spec.name].set(actual_option)
 
-    def validate(self, markdown):
-        errors = []
-        lines = markdown.split("\n")
-        i = 1
-        for line in lines:
-            try:
-                self.validate_line(line, i)
-            except RuleError as e:
-                errors.append(e)
-            i += 1
-        return errors
-
-    def validate_line(self, line):
+    @abstractmethod
+    def validate(self):
         pass
 
 
-class RuleError(Exception):
-    def __init__(self, rule_id, line_nr, message):
+class FileRule(Rule):
+    """ Class representing rules that act on an entire file """
+    pass
+
+
+class LineRule(Rule):
+    """ Class representing rules that act on a line by line basis """
+    pass
+
+
+class RuleViolation(object):
+    def __init__(self, rule_id, message, line_nr=None):
         self.rule_id = rule_id
         self.line_nr = line_nr
         self.message = message
@@ -42,25 +44,28 @@ class RuleError(Exception):
         return self.rule_id == other.rule_id and self.message == other.message and self.line_nr == other.line_nr
 
     def __str__(self):
-        return self.message
+        return "{0}: {1} {2}".format(self.line_nr, self.rule_id, self.message)
+
+    def __repr__(self):
+        return self.__str__()
 
 
-class MaxLineLengthRule(Rule):
+class MaxLineLengthRule(LineRule):
     name = "Max line length"
     id = "R1"
     options_spec = [IntOption('line-length', 80, "Max line length")]
 
-    def validate_line(self, line, line_nr):
+    def validate(self, line):
         max_length = self.options['line-length'].value
         if len(line) > max_length:
-            raise RuleError(self.id, line_nr, "Line exceeds max length ({0}>{1})".format(len(line), max_length))
+            return RuleViolation(self.id, "Line exceeds max length ({0}>{1})".format(len(line), max_length))
 
 
-class TrailingWhiteSpace(Rule):
+class TrailingWhiteSpace(LineRule):
     name = "Trailing whitespace"
     id = "R2"
 
-    def validate_line(self, line, line_nr):
+    def validate(self, line):
         pattern = re.compile(r"\s$")
         if pattern.search(line):
-            raise RuleError(self.id, line_nr, "Line has trailing whitespace")
+            return RuleViolation(self.id, "Line has trailing whitespace")
