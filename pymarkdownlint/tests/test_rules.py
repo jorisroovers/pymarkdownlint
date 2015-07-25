@@ -1,5 +1,5 @@
 from pymarkdownlint.tests.base import BaseTestCase
-from pymarkdownlint.rules import MaxLineLengthRule, TrailingWhiteSpace, RuleViolation
+from pymarkdownlint.rules import MaxLineLengthRule, TrailingWhiteSpace, RuleViolation, HardTab
 
 
 class RuleTests(BaseTestCase):
@@ -39,4 +39,16 @@ class RuleTests(BaseTestCase):
 
         # trailing tab
         violation = rule.validate("a\t")
+        self.assertEqual(violation, expected_violation)
+
+    def test_hard_tabs(self):
+        rule = HardTab()
+
+        # assert no error
+        violation = rule.validate("This is a test")
+        self.assertIsNone(violation)
+
+        # contains hard tab
+        expected_violation = RuleViolation("R3", "Line contains hard tab characters (\\t)")
+        violation = rule.validate("This is a\ttest")
         self.assertEqual(violation, expected_violation)

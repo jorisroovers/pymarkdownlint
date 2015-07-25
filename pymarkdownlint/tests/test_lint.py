@@ -10,7 +10,8 @@ class RuleOptionTests(BaseTestCase):
         sample = self.get_sample_path("sample1.md")
         with open(sample) as f:
             errors = linter.lint(f.read())
-            expected_errors = [RuleViolation("R1", 'Line exceeds max length (119>80)', 3),
-                               RuleViolation("R2", 'Line has trailing whitespace', 4),
-                               RuleViolation("R2", 'Line has trailing whitespace', 5)]
+            expected_errors = [RuleViolation("R1", "Line exceeds max length (119>80)", 3),
+                               RuleViolation("R2", "Line has trailing whitespace", 4),
+                               RuleViolation("R2", "Line has trailing whitespace", 5),
+                               RuleViolation("R3", "Line contains hard tab characters (\\t)", 5)]
             self.assertListEqual(errors, expected_errors)

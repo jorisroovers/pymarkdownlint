@@ -1,10 +1,10 @@
 from __future__ import print_function
-from pymarkdownlint.rules import LineRule, MaxLineLengthRule, TrailingWhiteSpace
+from pymarkdownlint import rules
 
 
 class MarkdownLinter(object):
     def __init__(self):
-        self.rules = [MaxLineLengthRule(), TrailingWhiteSpace()]
+        self.rules = [rules.MaxLineLengthRule(), rules.TrailingWhiteSpace(), rules.HardTab()]
 
     def lint_files(self, files):
         """
@@ -26,7 +26,7 @@ class MarkdownLinter(object):
         all_violations = []
         lines = markdown_string.split("\n")
         for rule in self.rules:
-            if isinstance(rule, LineRule):
+            if isinstance(rule, rules.LineRule):
                 line_nr = 1
                 for line in lines:
                     violation = rule.validate(line)

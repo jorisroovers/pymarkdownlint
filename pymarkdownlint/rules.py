@@ -69,3 +69,12 @@ class TrailingWhiteSpace(LineRule):
         pattern = re.compile(r"\s$")
         if pattern.search(line):
             return RuleViolation(self.id, "Line has trailing whitespace")
+
+
+class HardTab(LineRule):
+    name = "Hard Tab"
+    id = "R3"
+
+    def validate(self, line):
+        if "\t" in line:
+            return RuleViolation(self.id, "Line contains hard tab characters (\\t)")
