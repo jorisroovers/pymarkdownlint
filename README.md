@@ -9,7 +9,9 @@ Markdown linter written in python. Inspired by [mivok/markdownlint](https://gith
 
 Get started by running:
 ```bash
-markdownlint examples/
+markdownlint examples/             # lint all files in a directory
+markdownlint examples/example1.md  # lint a single file
+
 ```
 NOTE: The returned exit code equals the number of errors found.
 

@@ -1,5 +1,5 @@
 from __future__ import print_function
-from pymarkdownlint.rules import MaxLineLengthRule, TrailingWhiteSpace
+from pymarkdownlint.rules import LineRule, MaxLineLengthRule, TrailingWhiteSpace
 
 
 class MarkdownLinter(object):
@@ -7,18 +7,31 @@ class MarkdownLinter(object):
         self.rules = [MaxLineLengthRule(), TrailingWhiteSpace()]
 
     def lint_files(self, files):
-        all_errors = []
+        """
+        Lints a list of files.
+        :param files: list of files to lint
+        :return: a list of violations found in the files
+        """
+        all_violations = []
         for filename in files:
             with open(filename, 'r') as f:
                 content = f.read()
-                errors = self.lint(content)
-                all_errors.extend(errors)
-                for e in errors:
+                violations = self.lint(content)
+                all_violations.extend(violations)
+                for e in violations:
                     print("{0}:{1}: {2} {3}".format(filename, e.line_nr, e.rule_id, e.message))
-        return len(all_errors)
+        return len(all_violations)
 
     def lint(self, markdown_string):
-        all_errors = []
+        all_violations = []
+        lines = markdown_string.split("\n")
         for rule in self.rules:
-            all_errors.extend(rule.validate(markdown_string))
-        return all_errors
+            if isinstance(rule, LineRule):
+                line_nr = 1
+                for line in lines:
+                    violation = rule.validate(line)
+                    if violation:
+                        violation.line_nr = line_nr
+                        all_violations.append(violation)
+                    line_nr += 1
+        return all_violations
