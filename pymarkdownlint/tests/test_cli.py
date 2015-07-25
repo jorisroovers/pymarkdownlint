@@ -22,7 +22,8 @@ class CLITests(BaseTestCase):
         self.assert_output_line(result.output, 0, "sample1.md", 3, "R1 Line exceeds max length (119>80)")
         self.assert_output_line(result.output, 1, "sample1.md", 4, "R2 Line has trailing whitespace")
         self.assert_output_line(result.output, 2, "sample1.md", 5, "R2 Line has trailing whitespace")
-        self.assertEqual(result.exit_code, 3)
+        self.assert_output_line(result.output, 3, "sample1.md", 5, "R3 Line contains hard tab characters (\\t)")
+        self.assertEqual(result.exit_code, 4)
 
     def test_cli_list_files(self):
         result = self.cli.invoke(cli.cli, ["--list-files", self.get_sample_path()])

@@ -2,7 +2,6 @@
 
 [![Build Status](https://travis-ci.org/jorisroovers/pymarkdownlint.svg?branch=master)]
 (https://travis-ci.org/jorisroovers/pymarkdownlint)
-
 [![PyPi Package](https://img.shields.io/pypi/v/pymarkdownlint.png)]
 (https://pypi.python.org/pypi/pymarkdownlint)
 
@@ -30,6 +29,7 @@ ID    | Name                | Description
 ------|---------------------|----------------------------------------------------
 R1    | Max line length     | Line length must be &lt; 80 chars.
 R2    | Trailing whitespace | Line cannot have trailing whitespace (space or tab)
+R3    | Hard Tabs           | Line contains hard tab characters (\t)
 
 
 ## Development ##
