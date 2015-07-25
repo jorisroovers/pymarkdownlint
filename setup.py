@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-import setuptools
+from setuptools import setup, find_packages
+import re
 import os
 
 # There is an issue with building python packages in a shared vagrant directory because of how setuptools works
@@ -7,14 +8,42 @@ import os
 # See: http://stackoverflow.com/a/22147112/381010
 del os.link
 
-# In python < 2.7.4, a lazy loading of package `pbr` will break
-# setuptools if some other modules registered functions in `atexit`.
-# solution from: http://bugs.python.org/issue15881#msg170215
-try:
-    import multiprocessing  # noqa
-except ImportError:
-    pass
+long_description = (
+    "Markdown linter written in python. Under active development."
+    "Source code: https://github.com/jorisroovers/pymarkdownlint"
+)
 
-setuptools.setup(
-    setup_requires=['pbr'],
-    pbr=True)
+# shamelessly stolen from mkdocs' setup.py: https://github.com/mkdocs/mkdocs/blob/master/setup.py
+def get_version(package):
+    """Return package version as listed in `__version__` in `init.py`."""
+    init_py = open(os.path.join(package, '__init__.py')).read()
+    return re.search("__version__ = ['\"]([^'\"]+)['\"]", init_py).group(1)
+
+
+setup(
+    name="pymarkdownlint",
+    version=get_version("pymarkdownlint"),
+    description="Markdown linter written in python. Under active development.",
+    long_description=long_description,
+    classifiers=[
+        "Development Status :: 3 - Alpha"
+        "Operating System :: OS Independent"
+        "Programming Language :: Python"
+        "Environment :: Console"
+        "Intended Audience :: Developers"
+        "License :: OSI Approved :: MIT License"
+    ],
+    install_requires=[
+        'Click==4.1',
+    ],
+    keywords='markdown markdownlint pymarkdownlint',
+    author='Joris Roovers',
+    url='https://github.com/jorisroovers/pymarkdownlint',
+    license='MIT',
+    packages=find_packages(exclude=["examples"]),
+    entry_points={
+        "console_scripts": [
+            "markdownlint = pymarkdownlint.cli:cli",
+        ],
+    },
+)
