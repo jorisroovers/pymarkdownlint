@@ -1,3 +1,4 @@
+import pymarkdownlint
 from pymarkdownlint.filefinder import MarkdownFileFinder
 from pymarkdownlint.lint import MarkdownLinter
 import click
@@ -12,6 +13,7 @@ def echo_files(files):
 @click.command()
 @click.option('--list-files', is_flag=True)
 @click.argument('path', type=click.Path(exists=True))
+@click.version_option(version=pymarkdownlint.__version__)
 def cli(list_files, path):
     """ Markdown lint tool, checks your markdown for styling issues """
     files = MarkdownFileFinder.find_files(path)

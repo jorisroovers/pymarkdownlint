@@ -1,4 +1,3 @@
 pip==7.1.0
 setuptools
-pbr==1.3.0
 Click==4.1
