@@ -6,9 +6,32 @@ class MarkdownLinter(object):
     def __init__(self):
         self.rules = [rules.MaxLineLengthRule(), rules.TrailingWhiteSpace(), rules.HardTab()]
 
+    @property
+    def line_rules(self):
+        return [rule for rule in self.rules if isinstance(rule, rules.LineRule)]
+
+    def _apply_line_rules(self, markdown_string):
+        """ Iterates over the lines in a given markdown string and applies all the enabled line rules to each line """
+        all_violations = []
+        lines = markdown_string.split("\n")
+        line_rules = self.line_rules
+        line_nr = 1
+        for line in lines:
+            for rule in line_rules:
+                violation = rule.validate(line)
+                if violation:
+                    violation.line_nr = line_nr
+                    all_violations.append(violation)
+            line_nr += 1
+        return all_violations
+
+    def lint(self, markdown_string):
+        all_violations = []
+        all_violations.extend(self._apply_line_rules(markdown_string))
+        return all_violations
+
     def lint_files(self, files):
-        """
-        Lints a list of files.
+        """ Lints a list of files.
         :param files: list of files to lint
         :return: a list of violations found in the files
         """
@@ -21,17 +44,3 @@ class MarkdownLinter(object):
                 for e in violations:
                     print("{0}:{1}: {2} {3}".format(filename, e.line_nr, e.rule_id, e.message))
         return len(all_violations)
-
-    def lint(self, markdown_string):
-        all_violations = []
-        lines = markdown_string.split("\n")
-        for rule in self.rules:
-            if isinstance(rule, rules.LineRule):
-                line_nr = 1
-                for line in lines:
-                    violation = rule.validate(line)
-                    if violation:
-                        violation.line_nr = line_nr
-                        all_violations.append(violation)
-                    line_nr += 1
-        return all_violations
