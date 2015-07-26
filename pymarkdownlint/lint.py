@@ -3,12 +3,12 @@ from pymarkdownlint import rules
 
 
 class MarkdownLinter(object):
-    def __init__(self):
-        self.rules = [rules.MaxLineLengthRule(), rules.TrailingWhiteSpace(), rules.HardTab()]
+    def __init__(self, config):
+        self.config = config
 
     @property
     def line_rules(self):
-        return [rule for rule in self.rules if isinstance(rule, rules.LineRule)]
+        return [rule for rule in self.config.rules if isinstance(rule, rules.LineRule)]
 
     def _apply_line_rules(self, markdown_string):
         """ Iterates over the lines in a given markdown string and applies all the enabled line rules to each line """

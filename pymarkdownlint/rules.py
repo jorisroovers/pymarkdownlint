@@ -19,6 +19,9 @@ class Rule(object):
             if actual_option:
                 self.options[op_spec.name].set(actual_option)
 
+    def __eq__(self, other):
+        return self.id == other.id and self.name == other.name
+
     @abstractmethod
     def validate(self):
         pass
@@ -51,7 +54,7 @@ class RuleViolation(object):
 
 
 class MaxLineLengthRule(LineRule):
-    name = "Max line length"
+    name = "max-line-length"
     id = "R1"
     options_spec = [IntOption('line-length', 80, "Max line length")]
 
@@ -62,7 +65,7 @@ class MaxLineLengthRule(LineRule):
 
 
 class TrailingWhiteSpace(LineRule):
-    name = "Trailing whitespace"
+    name = "trailing-whitespace"
     id = "R2"
 
     def validate(self, line):
@@ -72,7 +75,7 @@ class TrailingWhiteSpace(LineRule):
 
 
 class HardTab(LineRule):
-    name = "Hard Tab"
+    name = "hard-tab"
     id = "R3"
 
     def validate(self, line):

@@ -1,5 +1,6 @@
 from pymarkdownlint.tests.base import BaseTestCase
 from pymarkdownlint import cli
+from pymarkdownlint import __version__
 
 from click.testing import CliRunner
 
@@ -17,7 +18,24 @@ class CLITests(BaseTestCase):
         self.assertEqual(result.output, "")
         self.assertEqual(result.exit_code, 0)
 
-    def test_errors(self):
+    def test_version(self):
+        result = self.cli.invoke(cli.cli, ["--version"])
+        self.assertEqual(result.output.split("\n")[0], "cli, version {0}".format(__version__))
+
+    def test_config_file(self):
+        args = ["--config", self.get_sample_path("markdownlint"), self.get_sample_path("sample1.md")]
+        result = self.cli.invoke(cli.cli, args)
+        expected_string = "Using config from {0}".format(self.get_sample_path("markdownlint"))
+        self.assertEqual(result.output.split("\n")[0], expected_string)
+
+    def test_config_file_negatiev(self):
+        args = ["--config", self.get_sample_path("foo"), self.get_sample_path("sample1.md")]
+        result = self.cli.invoke(cli.cli, args)
+        expected_string = "Error: Invalid value for \"--config\": Path \"{0}\" does not exist.".format(
+            self.get_sample_path("foo"))
+        self.assertEqual(result.output.split("\n")[2], expected_string)
+
+    def test_violations(self):
         result = self.cli.invoke(cli.cli, [self.get_sample_path("sample1.md")])
         self.assert_output_line(result.output, 0, "sample1.md", 3, "R1 Line exceeds max length (119>80)")
         self.assert_output_line(result.output, 1, "sample1.md", 4, "R2 Line has trailing whitespace")
