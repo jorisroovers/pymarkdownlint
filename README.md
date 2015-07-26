@@ -23,13 +23,20 @@ markdownlint --list-files examples/
 markdownlint --help                # show more commands
 ```
 
+You can modify pymarkdownlint's behavior by specifying a config file like so: 
+```
+markdownlint --config myconfigfile 
+```
+By default, markdownlint will look for an **optional** ```.markdownlint``` file for configuration.
+
+
 ## Supported Rules ##
 
 ID    | Name                | Description
 ------|---------------------|----------------------------------------------------
-R1    | Max line length     | Line length must be &lt; 80 chars.
-R2    | Trailing whitespace | Line cannot have trailing whitespace (space or tab)
-R3    | Hard Tabs           | Line contains hard tab characters (\t)
+R1    | max-line-length     | Line length must be &lt; 80 chars.
+R2    | trailing-whitespace | Line cannot have trailing whitespace (space or tab)
+R3    | hard-tabs           | Line contains hard tab characters (\t)
 
 
 ## Development ##
