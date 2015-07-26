@@ -26,11 +26,11 @@ setup(
     description="Markdown linter written in python. Under active development.",
     long_description=long_description,
     classifiers=[
-        "Development Status :: 3 - Alpha"
-        "Operating System :: OS Independent"
-        "Programming Language :: Python"
-        "Environment :: Console"
-        "Intended Audience :: Developers"
+        "Development Status :: 3 - Alpha",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
+        "Environment :: Console",
+        "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License"
     ],
     install_requires=[
