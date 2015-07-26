@@ -7,7 +7,7 @@
 
 Markdown linter written in python. Inspired by [mivok/markdownlint](https://github.com/mivok/markdownlint).
 
-**NOTE: pymarkdownlint is still under active development and missing many core features** 
+**NOTE: pymarkdownlint is still under active development and missing many core features**
 
 Get started by running:
 ```bash
@@ -17,18 +17,34 @@ markdownlint examples/example1.md  # lint a single file
 ```
 NOTE: The returned exit code equals the number of errors found.
 
-If you only want to list the files that will be checked: 
+Other commands and variations:
+
 ```bash
-markdownlint --list-files examples/
-markdownlint --help                # show more commands
+Usage: markdownlint [OPTIONS] PATH
+
+Markdown lint tool, checks your markdown for styling issues
+
+Options:
+  --config PATH  Config file location (default: .markdownlint).
+  --list-files   List markdown files in given path and exit.
+  --ignore TEXT  Ignore rules (comma-separated by id or name).
+  --version      Show the version and exit.
+  --help         Show this message and exit.
 ```
 
 You can modify pymarkdownlint's behavior by specifying a config file like so: 
-```
+```bash
 markdownlint --config myconfigfile 
 ```
 By default, markdownlint will look for an **optional** ```.markdownlint``` file for configuration.
 
+## Config file ##
+
+```
+[general]
+# rules can be ignored by name or by id
+ignore=max-line-length, R3
+```
 
 ## Supported Rules ##
 
@@ -56,10 +72,8 @@ vagrant ssh
 ```
 
 ## Wishlist ##
-- Refactor rule engine, line rules vs. file rules
 - More rules!
 - Better output handling with verbosity levels
-- Ignore files CLI options
-- Disable rules CLI options
-- .markdownlint config support
+- Ignore/exclude files CLI options
+- Ignore rules CLI options
 - Auto doc generation based on rules
