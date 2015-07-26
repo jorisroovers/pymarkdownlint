@@ -38,13 +38,29 @@ class LintConfig(object):
             self.disable_rule_by_id(rule.id)
 
     @staticmethod
+    def apply_on_csv_string(rules_str, func):
+        """ Splits a given string by comma, trims whitespace on the resulting strings and applies a given ```func``` to
+        each item. """
+        splitted = rules_str.split(",")
+        for str in splitted:
+            func(str.strip())
+
+    @staticmethod
     def load_from_file(filename):
         if not os.path.exists(filename):
             raise LintConfigError("Invalid file path: {0}".format(filename))
+        config = LintConfig()
         try:
             parser = ConfigParser.ConfigParser()
             parser.read(filename)
+            LintConfig._parse_general_section(parser, config)
         except ConfigParser.Error as e:
             raise LintConfigError("Error during config file parsing: {0}".format(e.message))
 
-        return LintConfig()
+        return config
+
+    @staticmethod
+    def _parse_general_section(parser, config):
+        if parser.has_section('general'):
+            ignore = parser.get('general', 'ignore', "")
+            LintConfig.apply_on_csv_string(ignore, config.disable_rule)
