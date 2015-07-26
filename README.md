@@ -75,5 +75,5 @@ vagrant ssh
 - More rules!
 - Better output handling with verbosity levels
 - Ignore/exclude files CLI options
-- Ignore rules CLI options
+- Rule specific configuration in config files
 - Auto doc generation based on rules
