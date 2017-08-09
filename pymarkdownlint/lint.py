@@ -16,12 +16,21 @@ class MarkdownLinter(object):
         lines = markdown_string.split("\n")
         line_rules = self.line_rules
         line_nr = 1
+        ignoring = False
         for line in lines:
-            for rule in line_rules:
-                violation = rule.validate(line)
-                if violation:
-                    violation.line_nr = line_nr
-                    all_violations.append(violation)
+            if ignoring:
+                if line.strip() == '<!-- markdownlint:enable -->':
+                    ignoring = False
+            else:
+                if line.strip() == '<!-- markdownlint:disable -->':
+                    ignoring = True
+                    continue
+
+                for rule in line_rules:
+                    violation = rule.validate(line)
+                    if violation:
+                        violation.line_nr = line_nr
+                        all_violations.append(violation)
             line_nr += 1
         return all_violations
 
