@@ -1,5 +1,5 @@
 from pymarkdownlint import rules
-import ConfigParser
+import configparser
 from collections import OrderedDict
 
 import os
@@ -11,7 +11,7 @@ class LintConfigError(Exception):
 
 class LintConfig(object):
     """ Class representing markdownlint configuration """
-    default_rule_classes = [rules.MaxLineLengthRule, rules.TrailingWhiteSpace, rules.HardTab]
+    default_rule_classes = [rules.MaxLineLengthRule, rules.TrailingWhiteSpace, rules.HardTab, rules.IncludesKeyword]
 
     def __init__(self):
         # Use an ordered dict so that the order in which rules are applied is always the same
