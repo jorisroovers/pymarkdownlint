@@ -2,7 +2,7 @@ from abc import abstractmethod, ABCMeta
 from pymarkdownlint.options import IntOption
 
 import re
-
+import frontmatter
 
 class Rule(object):
     """ Class representing markdown rules. """
@@ -81,3 +81,13 @@ class HardTab(LineRule):
     def validate(self, line):
         if "\t" in line:
             return RuleViolation(self.id, "Line contains hard tab characters (\\t)")
+
+
+class IncludesKeyword(FileRule):
+    name = "correct-keyword"
+    id = "R4"
+
+    def validate(self, markdown_string):
+        post = frontmatter.loads(markdown_string)
+        if post['keyword'] not in post.content:
+            return RuleViolation(self.id, "Keyword missing: ({0})".format(post['keyword']))

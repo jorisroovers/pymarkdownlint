@@ -9,12 +9,31 @@ class MarkdownLinter(object):
     @property
     def line_rules(self):
         return [rule for rule in self.config.rules if isinstance(rule, rules.LineRule)]
+    @property
+    def file_rules(self):
+        return [rule for rule in self.config.rules if isinstance(rule, rules.FileRule)]
+
+    def _apply_file_rules(self, markdown_string):
+        file_violations = []
+        ignoring = False
+        if ignoring:
+            if markdown_string.strip() == '<!-- markdownlint:enable -->':
+                ignoring = False
+        else:
+            if markdown_string.strip() == '<!-- markdownlint:disable -->':
+                ignoring = True
+
+            for rule in self.file_rules:
+                violation = rule.validate(markdown_string)
+                if violation:
+                    violation.rule_id = rule.id
+                    file_violations.append(violation)
+        return file_violations
 
     def _apply_line_rules(self, markdown_string):
         """ Iterates over the lines in a given markdown string and applies all the enabled line rules to each line """
-        all_violations = []
+        line_violations = []
         lines = markdown_string.split("\n")
-        line_rules = self.line_rules
         line_nr = 1
         ignoring = False
         for line in lines:
@@ -26,18 +45,18 @@ class MarkdownLinter(object):
                     ignoring = True
                     continue
 
-                for rule in line_rules:
+                for rule in self.line_rules:
                     violation = rule.validate(line)
                     if violation:
                         violation.line_nr = line_nr
-                        all_violations.append(violation)
+                        line_violations.append(violation)
             line_nr += 1
-        return all_violations
+        return line_violations
 
     def lint(self, markdown_string):
-        all_violations = []
-        all_violations.extend(self._apply_line_rules(markdown_string))
-        return all_violations
+        file_rules = self._apply_file_rules(markdown_string)
+        line_rules = self._apply_line_rules(markdown_string)
+        return file_rules + line_rules
 
     def lint_files(self, files):
         """ Lints a list of files.
