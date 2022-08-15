@@ -1,5 +1,5 @@
 from pymarkdownlint import rules
-import ConfigParser
+import configparser
 from collections import OrderedDict
 
 import os
